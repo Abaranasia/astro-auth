@@ -1,4 +1,6 @@
 ---
+import Navbar from '@components/shared/Navbar.astro';
+
 interface Props {
   title?: string;
 }
@@ -15,6 +17,7 @@ const { title = "Auth astro App" } = Astro.props;
     <title>{title}</title>
   </head>
   <body>
+    <Navbar />
     <slot />
   </body>
 </html>
