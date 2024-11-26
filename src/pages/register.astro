@@ -2,8 +2,9 @@
 import AuthLayout from "@layouts/AuthLayout.astro";
 
 const email = Astro.cookies.get('email')?.value ?? ''; 
-// We need the cookie at this point to make it persistent. By this way have (or not) this value in server side
 const rememberMe = !!email;
+// In order to  make it persistent, we need the cookie at this point. 
+// By this way we have (or not) this value in server side
 ---
 
 <AuthLayout>
