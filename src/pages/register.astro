@@ -1,5 +1,9 @@
 ---
 import AuthLayout from "@layouts/AuthLayout.astro";
+
+const email = Astro.cookies.get('email')?.value ?? ''; 
+// We need the cookie at this point to make it persistent. By this way have (or not) this value in server side
+const rememberMe = !!email;
 ---
 
 <AuthLayout>
@@ -29,6 +33,7 @@ import AuthLayout from "@layouts/AuthLayout.astro";
           type="email"
           name="email"
           placeholder="mail@gmail.com"
+          value={ email }
         />
       </div>
       <div class="space-y-2">
@@ -49,6 +54,7 @@ import AuthLayout from "@layouts/AuthLayout.astro";
             name="remember_me"
             type="checkbox"
             class="h-4 w-4 bg-blue-500 focus:ring-blue-400 border-gray-300 rounded"
+            checked={ rememberMe }
           />
           <label for="remember_me" class="ml-2 block text-sm text-gray-800">
             Remember me
@@ -96,10 +102,12 @@ import AuthLayout from "@layouts/AuthLayout.astro";
     btnSubmit.setAttribute("disabled", "disabled");
 
     const formData = new FormData(form);
-    debugger;
     const { data, error } = await actions.registerUser(formData);
 
-    if (error) console.log(error);
+    if (error) {
+      throw new Error(`Error during the registration process: ${error}`)
+    };
+
     btnSubmit.removeAttribute("disabled");
   });
 </script>
