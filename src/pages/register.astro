@@ -94,6 +94,7 @@ const rememberMe = !!email;
 
 <script>
   import { actions } from "astro:actions";
+  import Swal from "sweetalert2";
 
   const form = document.querySelector("form") as HTMLFormElement;
   const btnSubmit = document.querySelector("#btn-submit") as HTMLButtonElement;
@@ -106,9 +107,23 @@ const rememberMe = !!email;
     const { data, error } = await actions.registerUser(formData);
 
     if (error) {
-      throw new Error(`Error during the registration process: ${error}`)
+      Swal.fire({
+        icon: "error",
+        title: "Error during the registration process",
+        text: error.message,
+      });
+      return;
     };
 
+    if (data) {
+      console.log('data :>> ', data);
+      Swal.fire({
+        icon: "success",
+        title: "Hey you, welcome!",
+        text: "User registered",
+      });
+      return;
+    }
     btnSubmit.removeAttribute("disabled");
   });
 </script>
