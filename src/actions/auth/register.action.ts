@@ -1,6 +1,9 @@
 import { defineAction } from "astro:actions";
 import { z } from "astro:schema";
 
+import { createUserWithEmailAndPassword, type AuthError } from "firebase/auth";
+import { firebase } from "src/firebase/fb-config";
+
 export const registerUser = defineAction({
   accept: "form",
   input: z.object({
@@ -15,6 +18,7 @@ export const registerUser = defineAction({
     
     console.log("cosos :>> ", name, email, password, remember_me);
 
+    // Cookies handling
     if (remember_me) {
         cookies.set('email', email, {
             expires: new Date(Date.now() + 1000 *60 *60 *24 *365), // 1 year
@@ -25,6 +29,28 @@ export const registerUser = defineAction({
             path:'/',
         });
     }
-    return {ok: true, msg: 'usuario creado'};
+
+    // user creation via firebase
+
+    try {
+      const user = await createUserWithEmailAndPassword(
+        firebase.auth, 
+        email, 
+        password,
+      );
+
+      // Update name
+
+      // Verify email
+
+      return user;
+    } catch (error) {
+      const firebaseError = error as AuthError;
+      if (firebaseError.code === 'auth/email-already-in-use') {
+        throw new Error ('Ouch, the email is already in use')
+      };
+
+      throw new Error (`Someting failed during user creation: ${error}`)
+    }
   },
 });
