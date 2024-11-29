@@ -3,10 +3,13 @@ import Mainlayout from "@layouts/Mainlayout.astro";
 import { firebase } from "src/firebase/fb-config";
 
 const firebaseUser = firebase.auth.currentUser;
-console.log("firebaseUser :>> ", firebaseUser);
 
-if (!firebaseUser) Astro.redirect("/login");
-const { displayName, email, emailVerified, photoURL } = firebaseUser;
+if (firebaseUser === null) {
+  return Astro.redirect("/login");
+}
+
+//@ts-ignore
+const { displayName, email, emailVerified, photoURL } = firebaseUser
 
 const name = displayName ?? "No display name";
 ---
