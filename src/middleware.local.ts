@@ -36,7 +36,7 @@ const checkLocalAuth = (authHeaders: string, next: MiddlewareNext) => {
 const getUserCredentials = (authHeaders: string) => {
   const authValue = authHeaders.split(" ").at(-1) ?? "user:pass"; // Removes 'Basic ' term
   const decodedValue = atob(authValue).split(":");
-  console.log("decodedValue :>> ", decodedValue);
+  
   const [user, password] = decodedValue;
   return { user, password };
 };

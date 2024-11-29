@@ -16,8 +16,6 @@ export const registerUser = defineAction({
     const { name, email, password, remember_me } = input;
     const { cookies } = context;
     
-    console.log("cosos :>> ", name, email, password, remember_me);
-
     // Cookies handling
     if (remember_me) {
         cookies.set('email', email, {
