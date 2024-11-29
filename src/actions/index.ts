@@ -1,6 +1,7 @@
-import { registerUser } from "./auth";
+import { logout, registerUser } from "./auth";
 
 export const server = {
     //  actions
     registerUser,
+    logout,
 }
