@@ -112,17 +112,10 @@ const rememberMe = !!email;
         title: "Error during the registration process",
         text: error.message,
       });
-      return;
-    };
 
-    if (data) {
-      Swal.fire({
-        icon: "success",
-        title: "Hey you, welcome!",
-        text: "User registered",
-      });
+      btnSubmit.removeAttribute("disabled");
       return;
-    }
-    btnSubmit.removeAttribute("disabled");
+    } 
+    window.location.replace('/protected') 
   });
 </script>

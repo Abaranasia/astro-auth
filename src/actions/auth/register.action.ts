@@ -41,9 +41,10 @@ export const registerUser = defineAction({
 
       // Verify email
 
-      return user;
+      return;
     } catch (error) {
       const firebaseError = error as AuthError;
+
       if (firebaseError.code === 'auth/email-already-in-use') {
         throw new Error ('Ouch, the email is already in use')
       };
