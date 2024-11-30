@@ -68,7 +68,7 @@ const rememberMe = !!email;
         <button
         id="btn-google"
         type="button"
-        class="disabled:bg-gray-300 w-full flex justify-center bg-red-400 hover:bg-red-500 text-gray-100 p-3 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500"
+        class="disabled:bg-gray-300 w-full flex justify-center bg-red-400 text-gray-100 p-3 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500"
       >
       Login with Google
       </button>
@@ -126,7 +126,7 @@ const rememberMe = !!email;
   // Google listerner
   form.addEventListener("click", async () => {
     btnGoogle.setAttribute("disabled", "disabled");
-    debugger
+    
     const provider = new GoogleAuthProvider();
     
     try {
