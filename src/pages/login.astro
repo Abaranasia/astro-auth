@@ -58,8 +58,20 @@ const rememberMe = !!email;
           type="submit"
           class="disabled:bg-gray-300 w-full flex justify-center bg-green-400 hover:bg-green-500 text-gray-100 p-3 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500"
         >
-          Sign in
+          Login
         </button>
+
+        <div class="flex flex-1 w-full my-3">
+          <div class="w-full border-t-2 border-gray-500"></div>
+        </div>
+
+        <button
+        id="btn-google"
+        type="button"
+        class="disabled:bg-gray-300 w-full flex justify-center bg-red-400 hover:bg-red-500 text-gray-100 p-3 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500"
+      >
+      Login with Google
+      </button>
       </div>
     </form>
     <div class="pt-5 text-center text-gray-400 text-xs">
@@ -78,26 +90,27 @@ const rememberMe = !!email;
 </AuthLayout>
 <script>
   import { actions } from "astro:actions";
+
+  import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+  import { firebase } from "src/firebase/fb-config";
+
   import Swal from "sweetalert2";
 
   const form = document.querySelector("form") as HTMLFormElement;
   const btnSubmit = document.querySelector("#btn-submit") as HTMLButtonElement;
+  const btnGoogle = document.querySelector("#btn-google") as HTMLButtonElement;
 
   let emailForm = document.querySelector("email") as HTMLFormElement;
-  // const cookies = Astro.cookies;
-
+  
+  // Submit listener
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     btnSubmit.setAttribute("disabled", "disabled");
 
-    /*     if (Astro.cookies) {
-            emailForm.nodeValue = cookies.get('email')?.value ?? '';
-        }; */
-
     const formData = new FormData(form);
-    console.log("formaData :>> ", formData);
-    const { data, error } = await actions.login(formData);
 
+    const { data, error } = await actions.login(formData);
+    
     if (error) {
       Swal.fire({
         icon: "error",
@@ -107,15 +120,27 @@ const rememberMe = !!email;
       btnSubmit.removeAttribute("disabled");
       return;
     }
-
-/*     if (data) {
-      Swal.fire({
-        icon: "success",
-        title: "Hey, welcome back!",
-        text: "User logged in",
-      });
-      return data;
-    } */
+    window.location.replace('/protected')
+  });
+  
+  // Google listerner
+  form.addEventListener("click", async () => {
+    btnGoogle.setAttribute("disabled", "disabled");
+    debugger
+    const provider = new GoogleAuthProvider();
+    
+    try {
+      // Get credentials
+      const credentials = await signInWithPopup(firebase.auth, provider);
+      console.log('credentials :>> ', credentials);
+      // Verify credentials in thr backend
+      const { data, error } = await actions.loginWithGoogle(credentials);
+      
+    } catch (error) {
+      console.log('error :>> ', error);
+      btnGoogle.removeAttribute("disabled");
+    }
+    btnGoogle.innerText = ' Redirecting...';
     window.location.replace('/protected')
   });
 </script>
