@@ -1,17 +1,23 @@
 ---
 import Mainlayout from "@layouts/Mainlayout.astro";
-import { firebase } from "src/firebase/fb-config";
+// import { firebase } from "src/firebase/fb-config";
 
-const firebaseUser = firebase.auth.currentUser;
+// const firebaseUser = firebase.auth.currentUser;
+const { user, isLoggedIn } = Astro.locals;
 
-if (firebaseUser === null) {
-  return Astro.redirect("/login");
-}
+/* 
+  if (firebaseUser === null) {
+    return Astro.redirect("/login");
+    }
+*/
 
-//@ts-ignore
-const { displayName, email, emailVerified, photoURL } = firebaseUser
+ if (!isLoggedIn || !user) {
+   return Astro.redirect("/login");
+ };
 
-const name = displayName ?? "No display name";
+// const { displayName, email, emailVerified, photoURL } = firebaseUser
+const { name, email, emailVerified, avatar } = user;
+
 ---
 
 <Mainlayout title="protected">
@@ -22,10 +28,10 @@ const name = displayName ?? "No display name";
   >
     <div class="card w-96 mx-auto bg-white shadow-xl hover:shadow rounded">
       {
-        photoURL ? (
+        avatar ? (
           <img
             class="w-32 mx-auto rounded-full -mt-20 border-8 border-white"
-            src={photoURL}
+            src={avatar}
             alt={name}
           />
         ) : (
