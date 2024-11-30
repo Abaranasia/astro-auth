@@ -1,8 +1,14 @@
-import { login, logout, registerUser } from "./auth";
+import { 
+    registerUser,
+    login, 
+    logout, 
+    loginWithGoogle, 
+ } from "./auth";
 
 export const server = {
     //  actions
     registerUser,
     login,
     logout,
+    loginWithGoogle,
 }
