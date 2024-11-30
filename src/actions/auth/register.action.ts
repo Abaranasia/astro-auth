@@ -1,7 +1,7 @@
 import { defineAction } from "astro:actions";
 import { z } from "astro:schema";
 
-import { createUserWithEmailAndPassword, type AuthError } from "firebase/auth";
+import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile, type AuthError } from "firebase/auth";
 import { firebase } from "src/firebase/fb-config";
 
 export const registerUser = defineAction({
@@ -29,7 +29,6 @@ export const registerUser = defineAction({
     }
 
     // user creation via firebase
-
     try {
       const user = await createUserWithEmailAndPassword(
         firebase.auth, 
@@ -38,8 +37,14 @@ export const registerUser = defineAction({
       );
 
       // Update name
+      updateProfile(firebase.auth.currentUser!, {
+        displayName:name,
+      });
 
       // Verify email
+      await sendEmailVerification(firebase.auth.currentUser!, {
+        url: 'http://localhost:4321/protected?emailVerified=true'
+      })
 
       return;
     } catch (error) {
